@@ -1,0 +1,73 @@
+; DNS Records for camptell.space
+; Import this file in Cloudflare: DNS → Records → Import and Export → Import
+
+; ============================================
+; A RECORDS - Point domain to VPS
+; ============================================
+
+; Root domain
+camptell.space.     1   IN  A   185.215.244.29
+
+; WWW subdomain
+www.camptell.space. 1   IN  A   185.215.244.29
+
+; Mail subdomain (optional, for webmail interface)
+mail.camptell.space. 1  IN  A   185.215.244.29
+
+
+; ============================================
+; MX RECORDS - Gmail/Google Workspace Email
+; ============================================
+
+camptell.space.     1   IN  MX  1   aspmx.l.google.com.
+camptell.space.     1   IN  MX  5   alt1.aspmx.l.google.com.
+camptell.space.     1   IN  MX  5   alt2.aspmx.l.google.com.
+camptell.space.     1   IN  MX  10  alt3.aspmx.l.google.com.
+camptell.space.     1   IN  MX  10  alt4.aspmx.l.google.com.
+
+
+; ============================================
+; TXT RECORDS - Email Authentication
+; ============================================
+
+; SPF Record - Authorize Gmail to send emails from your domain
+camptell.space.     1   IN  TXT "v=spf1 include:_spf.google.com ~all"
+
+; DMARC Record - Email security policy
+_dmarc.camptell.space. 1 IN TXT "v=DMARC1; p=quarantine; rua=mailto:admin@camptell.space; ruf=mailto:admin@camptell.space; fo=1"
+
+; DKIM will be added later from Google Workspace admin console
+; Format: [selector]._domainkey.camptell.space IN TXT "v=DKIM1; k=rsa; p=[public-key]"
+
+
+; ============================================
+; CNAME RECORDS (Optional)
+; ============================================
+
+; If you want app.camptell.space to point to the main domain
+; app.camptell.space. 1  IN  CNAME   camptell.space.
+
+
+; ============================================
+; IMPORTANT NOTES:
+; ============================================
+; 
+; 1. After importing, verify Gmail/Google Workspace setup:
+;    - Go to admin.google.com
+;    - Add and verify camptell.space
+;    - Get DKIM record and add it to Cloudflare
+; 
+; 2. DKIM Setup (do this after import):
+;    - In Google Workspace Admin: Apps → Google Workspace → Gmail → Authenticate email
+;    - Generate new record
+;    - Copy the TXT record value
+;    - Add to Cloudflare as: google._domainkey.camptell.space
+; 
+; 3. Set Cloudflare SSL/TLS to "Full (strict)" for Laravel app
+; 
+; 4. Disable Cloudflare proxy (gray cloud) for email-related records if you have issues
+;
+; 5. If not using Google Workspace (paid), you can use Gmail SMTP for sending only:
+;    - No MX records needed
+;    - Keep SPF: v=spf1 include:_spf.google.com ~all
+;    - Configure Laravel to use Gmail SMTP in .env

@@ -546,3 +546,4 @@ echo "  - Set APP_DEBUG=false in production"
 echo "  - Configure firewall (ufw enable)"
 echo "  - Keep system packages updated"
 echo ""
+
